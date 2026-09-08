@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NodeWatch Resource Monitor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Container observability dashboard</p>
+        <h1>NodeWatch</h1>
+        <p class="hero-copy">Live Flask and psutil monitoring for CPU, memory, disk, network, processes, and host health.</p>
+      </div>
+      <section class="status-panel" aria-label="System health">
+        <span class="live-dot" aria-hidden="true"></span>
+        <div>
+          <span class="label">Health</span>
+          <strong id="healthLabel">Loading</strong>
+        </div>
+        <div>
+          <span class="label">Updated</span>
+          <strong id="updatedAt">--</strong>
+        </div>
+      </section>
+    </header>
+
+    <section class="metrics-grid" aria-label="Key metrics">
+      <article class="metric-card accent-cpu">
+        <span class="label">CPU</span>
+        <strong id="cpuValue">--%</strong>
+        <div class="meter"><span id="cpuMeter"></span></div>
+      </article>
+      <article class="metric-card accent-memory">
+        <span class="label">Memory</span>
+        <strong id="memoryValue">--%</strong>
+        <p id="memoryDetail">-- GB used</p>
+        <div class="meter"><span id="memoryMeter"></span></div>
+      </article>
+      <article class="metric-card accent-disk">
+        <span class="label">Disk</span>
+        <strong id="diskValue">--%</strong>
+        <p id="diskDetail">-- GB used</p>
+        <div class="meter"><span id="diskMeter"></span></div>
+      </article>
+      <article class="metric-card accent-network">
+        <span class="label">Network I/O</span>
+        <strong id="networkValue">-- KB/s</strong>
+        <p id="networkDetail">-- MB total</p>
+        <div class="network-pair"><span>Down</span><span id="networkDown">--</span><span>Up</span><span id="networkUp">--</span></div>
+      </article>
+    </section>
+
+    <section class="main-grid">
+      <article class="panel history-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="label">Rolling history</span>
+            <h2>Live Resource Trend</h2>
+          </div>
+          <span class="chip">Last 60 samples</span>
+        </div>
+        <canvas id="historyChart" width="960" height="360" aria-label="CPU and memory history chart"></canvas>
+        <div class="legend"><span class="cpu-line"></span>CPU <span class="memory-line"></span>Memory <span class="disk-line"></span>Disk</div>
+      </article>
+
+      <aside class="panel system-panel">
+        <div class="panel-heading compact">
+          <div>
+            <span class="label">Host</span>
+            <h2>System</h2>
+          </div>
+        </div>
+        <dl class="system-list">
+          <div><dt>Hostname</dt><dd id="hostname">--</dd></div>
+          <div><dt>OS</dt><dd id="osName">--</dd></div>
+          <div><dt>CPU cores</dt><dd id="coreCount">--</dd></div>
+          <div><dt>System uptime</dt><dd id="systemUptime">--</dd></div>
+          <div><dt>App uptime</dt><dd id="appUptime">--</dd></div>
+        </dl>
+      </aside>
+    </section>
+
+    <section class="split-grid">
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <span class="label">CPU detail</span>
+            <h2>Per-Core Usage</h2>
+          </div>
+        </div>
+        <div id="coreGrid" class="core-grid"></div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <span class="label">Process table</span>
+            <h2>Top Processes</h2>
+          </div>
+        </div>
+        <div class="process-table">
+          <div class="table-row table-head"><span>PID</span><span>Name</span><span>CPU</span><span>Memory</span></div>
+          <div id="processRows"></div>
+        </div>
+      </article>
+    </section>
+  </main>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
